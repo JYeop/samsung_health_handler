@@ -1,8 +1,7 @@
 name: samsung_health_handler
-description: A new Flutter project.
-version: 0.0.1
-author:
-homepage:
+description: Helps to integrate flutter with the Samsung-health-app
+version: 0.0.2
+homepage: https://github.com/JYeop/samsung_health_handler
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
