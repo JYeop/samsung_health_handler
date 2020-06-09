@@ -76,7 +76,6 @@ class ConnectionHandler(
   }
 
   override fun onConnected() {
-      println("온커넥티드!!")
       val hashMap = HashMap<String, Boolean>()
       hashMap["isConnected"] = true;
       eventSink?.success(hashMap);
@@ -100,7 +99,6 @@ class ConnectionHandler(
   }
 
   override fun onListen(arguments: Any?, events: EventChannel.EventSink?) {
-    println("온리슨!!!")
     eventSink = events
   }
 

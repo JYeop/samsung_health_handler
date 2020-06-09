@@ -1,6 +1,6 @@
 name: samsung_health_handler
 description: Helps to integrate flutter with the Samsung-health-app
-version: 0.0.2
+version: 0.0.3
 homepage: https://github.com/JYeop/samsung_health_handler
 
 environment:

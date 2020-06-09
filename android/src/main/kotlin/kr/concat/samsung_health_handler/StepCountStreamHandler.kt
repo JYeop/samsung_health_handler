@@ -9,7 +9,6 @@ class StepCountStreamHandler(
   var mCurrentStartTime: Long = 0
   override fun onListen(arguments: Any?, events: EventChannel.EventSink?) {
     eventSink = events
-    println("스텝카운터리슨했음!")
   }
 
   override fun onCancel(arguments: Any?) {
