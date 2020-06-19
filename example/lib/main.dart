@@ -18,8 +18,8 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      initialize();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await initialize();
     });
   }
 
@@ -113,6 +113,22 @@ class _MyAppState extends State<MyApp> {
                   disposeSamsungHealth();
                 },
                 child: Text('dispose'),
+              ),
+              RaisedButton(
+                onPressed: () async {
+                  try {
+//                    Must be called after initialized
+//                  gets date of 2020/06/01
+                    StepCountDataType res = await SamsungHealthHandler.getStepCount(1590969600000);
+                    print(DateTime.fromMillisecondsSinceEpoch(res.timestamp));
+                    print(res.stepCount);
+                    print(res.distance);
+                    print(res.calorie);
+                  } catch (error) {
+                    print(error);
+                  }
+                },
+                child: Text('getStepCount once'),
               ),
             ],
           ),

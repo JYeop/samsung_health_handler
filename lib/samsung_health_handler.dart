@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/services.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:samsung_health_handler/StepCountDataType.dart';
 
 class SamsungHealthHandler {
@@ -14,6 +16,8 @@ class SamsungHealthHandler {
   // ignore: top_level_function_literal_block
   static Stream<StepCountDataType> get stream => SamsungHealthHandler.stepChannel.receiveBroadcastStream().map((event) {
         final Map<String, dynamic> data = Map.from(event);
+        var stepData = StepCountDataType.fromJson(data);
+        samsungHandlerValueHandler.stepCountState.add(stepData);
 //        print(data);
         return StepCountDataType.fromJson(data);
       });
@@ -64,4 +68,33 @@ class SamsungHealthHandler {
     final dynamic result = await channel.invokeMethod('nextDate');
     return result;
   }
+
+  static Future<StepCountDataType> getStepCount(int millisecondTimestamp) async {
+    passTimestamp(millisecondTimestamp);
+    StepCountDataType result = StepCountDataType.fromJson({});
+    try {
+      var intList = new List<int>.generate(10, (i) => i + 1);
+      await Future.forEach(intList, (_) async {
+        await Future.delayed(Duration(milliseconds: 5));
+        var passedTime = DateTime.fromMillisecondsSinceEpoch(millisecondTimestamp);
+        var value = samsungHandlerValueHandler.stepCountState.value;
+        var dateTime = DateTime.fromMillisecondsSinceEpoch(value.timestamp);
+        if (dateTime.day == passedTime.day && dateTime.month == passedTime.month && dateTime.year == passedTime.year) {
+          result = value;
+          return;
+        }
+      });
+      return result;
+    } catch (error) {
+      throw error;
+    }
+  }
 }
+
+class SamsungHandlerValueHandler {
+  // ignore: close_sinks
+  BehaviorSubject<StepCountDataType> stepCountState =
+      new BehaviorSubject<StepCountDataType>.seeded(StepCountDataType.fromJson({}));
+}
+
+var samsungHandlerValueHandler = SamsungHandlerValueHandler();
