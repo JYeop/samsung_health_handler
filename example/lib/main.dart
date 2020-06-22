@@ -52,85 +52,111 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(
           title: Text('Plugin example app'),
         ),
-        body: Center(
-          child: Column(
-            children: <Widget>[
-              StreamBuilder<StepCountDataType>(
-                stream: stepStream,
-                builder: (BuildContext context, AsyncSnapshot<StepCountDataType> snapshot) {
-                  try {
-                    if (snapshot.data != null) {
-                      var timestamp = snapshot.data.timestamp;
-                      var date = DateTime.fromMillisecondsSinceEpoch(timestamp);
-                      var steps = snapshot.data.stepCount;
-//                      Data of today only delivers stepCount
-                      var calorie = snapshot.data.calorie;
-                      var distance = snapshot.data.distance;
-                      return Column(
-                        children: <Widget>[
-                          Text('date: $date'),
-                          Text('steps: $steps'),
-                          Text('calorie: $calorie'),
-                          Text('distance: $distance'),
-                        ],
-                      );
-                    } else {
-                      return Text('data of current date does not exist.');
-                    }
-                  } catch (error) {
-                    return Text('error: $error');
-                  }
-                },
-              ),
-              Row(
-                children: <Widget>[
+        body: SingleChildScrollView(
+          child: Center(
+            child: Column(
+              children: <Widget>[
+                                Row(
+                  children: <Widget>[
 //                        Calls data of 2020/04/05
-                  RaisedButton(
-                    child: Text('4/5'),
-                    onPressed: () {
-                      SamsungHealthHandler.passTimestamp(DateTime.now().millisecondsSinceEpoch);
-                    },
-                  ),
-                  RaisedButton(
-                    child: Text('prevDate'),
-                    onPressed: () {
-                      SamsungHealthHandler.prevDate();
-                    },
-                  ),
-                  RaisedButton(
-                    child: Text('nextDate'),
-                    onPressed: () {
-                      SamsungHealthHandler.nextDate();
-                    },
-                  ),
-                ],
-              ),
-              Text('On hot restart, dispose method of stateful widget does not work.'
-                  '\n So, If you want to reinitialize SamsungHealthHandler,'
-                  '\n you have to manually dispose and reinitialize.'),
-              RaisedButton(
-                onPressed: () {
-                  disposeSamsungHealth();
-                },
-                child: Text('dispose'),
-              ),
-              RaisedButton(
-                onPressed: () async {
-                  try {
+                    RaisedButton(
+                      child: Text('4/5'),
+                      onPressed: () {
+                        SamsungHealthHandler.passTimestamp(DateTime.now().millisecondsSinceEpoch);
+                      },
+                    ),
+                    RaisedButton(
+                      child: Text('prevDate'),
+                      onPressed: () {
+                        SamsungHealthHandler.prevDate();
+                      },
+                    ),
+                    RaisedButton(
+                      child: Text('nextDate'),
+                      onPressed: () {
+                        SamsungHealthHandler.nextDate();
+                      },
+                    ),
+                  ],
+                ),
+                Text('On hot restart, dispose method of stateful widget does not work.'
+                    '\n So, If you want to reinitialize SamsungHealthHandler,'
+                    '\n you have to manually dispose and reinitialize.'),
+                RaisedButton(
+                  onPressed: () {
+                    disposeSamsungHealth();
+                  },
+                  child: Text('dispose'),
+                ),
+                RaisedButton(
+                  onPressed: () async {
+                    try {
 //                    Must be called after initialized
 //                  gets date of 2020/06/01
-                    StepCountDataType res = await SamsungHealthHandler.getStepCount(1590969600000);
-                    print(DateTime.fromMillisecondsSinceEpoch(res.timestamp));
-                    print(res.stepCount);
-                    print(res.distance);
-                    print(res.calorie);
-                  } catch (error) {
-                    print(error);
-                  }
-                },
-                child: Text('getStepCount once'),
-              ),
-            ],
+                      StepCountDataType res = await SamsungHealthHandler.getStepCount(1590969600000);
+                      print(DateTime.fromMillisecondsSinceEpoch(res.timestamp));
+                      print(res.stepCount);
+                      print(res.distance);
+                      print(res.calorie);
+                    } catch (error) {
+                      print(error);
+                    }
+                  },
+                  child: Text('getStepCount once'),
+                ),
+                StreamBuilder<StepCountDataType>(
+                  stream: stepStream,
+                  builder: (BuildContext context, AsyncSnapshot<StepCountDataType> snapshot) {
+                    try {
+                      print(snapshot.data);
+                      if (snapshot.data != null) {
+                        var timestamp = snapshot.data.timestamp;
+                        var date = DateTime.fromMillisecondsSinceEpoch(timestamp);
+                        var steps = snapshot.data.stepCount;
+//                      Data of today only delivers stepCount
+                        var calorie = snapshot.data.calorie;
+                        var distance = snapshot.data.distance;
+                        var binningData = snapshot.data.binningData;
+                        print(binningData);
+                        return Column(
+                          children: <Widget>[
+                            Text('date: $date'),
+                            Text('steps: $steps'),
+                            Text('calorie: $calorie'),
+                            Text('distance: $distance'),
+                            ListView.separated(
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              itemCount: binningData.length,
+                              separatorBuilder: (BuildContext context, int index) => Divider(
+                                height: 3,
+                              ),
+                              itemBuilder: (BuildContext context, int index) {
+                                var binningValue = binningData[index];
+                                var binningTime = binningValue.time;
+                                var binningStepCount = binningValue.stepCount;
+                                return ListTile(
+                                  title: Column(
+                                    children: <Widget>[
+                                      Text('time: $binningTime'),
+                                      Text('steps: $binningStepCount'),
+                                    ],
+                                  ),
+                                );
+                              },
+                            ),
+                          ],
+                        );
+                      } else {
+                        return Text('data of current date does not exist.');
+                      }
+                    } catch (error) {
+                      return Text('error: $error');
+                    }
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),

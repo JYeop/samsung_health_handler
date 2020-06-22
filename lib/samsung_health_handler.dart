@@ -14,12 +14,34 @@ class SamsungHealthHandler {
   static StreamController<StepCountDataType> streamController = StreamController.broadcast();
 
   // ignore: top_level_function_literal_block
-  static Stream<StepCountDataType> get stream => SamsungHealthHandler.stepChannel.receiveBroadcastStream().map((event) {
-        final Map<String, dynamic> data = Map.from(event);
-        var stepData = StepCountDataType.fromJson(data);
-        samsungHandlerValueHandler.stepCountState.add(stepData);
-//        print(data);
-        return StepCountDataType.fromJson(data);
+  static Stream<StepCountDataType> get stream =>
+      SamsungHealthHandler.stepChannel.receiveBroadcastStream().map((event) {
+        if (event.runtimeType.toString() != 'List<dynamic>') {
+          final Map<String, dynamic> data = Map.from(event);
+          samsungHandlerValueHandler.stepCountState.add(StepCountDataType.fromJson({
+            ...data,
+            ...{
+              'binningData': samsungHandlerValueHandler.stepCountState.value.binningData,
+            }
+          }));
+        } else {
+          List<dynamic> newArr = List.from(event);
+          var stepCountBinningData = newArr.map((e) {
+            print(e);
+            return StepCountBinningDataType.fromJson({
+              ...e,
+              'receivedAt': DateTime.now().millisecondsSinceEpoch,
+            });
+          }).toList();
+          var stepCountData = samsungHandlerValueHandler.stepCountState.value.toJson();
+          samsungHandlerValueHandler.stepCountState.add(StepCountDataType.fromJson({
+            ...stepCountData,
+            ...{
+              'binningData': stepCountBinningData,
+            }
+          }));
+        }
+        return samsungHandlerValueHandler.stepCountState.value;
       });
 
   // ignore: top_level_function_literal_block

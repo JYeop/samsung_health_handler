@@ -25,6 +25,20 @@ class StepCountStreamHandler(
   }
 
   override fun onBinningDataChanged(binningCountList: List<StepCountReader.StepBinningData>?) {
+//    val hashMapList : List<HashMap<String, Any>> = List<HashMap<String, Any>>()
+//    var hashMapList = binningCountList?.map {  }
+    val hashMapList = mutableListOf<HashMap<String, Any>>()
+    if (binningCountList != null) {
+      for (i in binningCountList.indices) {
+        val value = binningCountList[i];
+        val hashMap: HashMap<String, Any> = HashMap<String, Any>()
+        hashMap["stepCount"] = value.count
+        hashMap["time"] = value.time
+        hashMapList.add(hashMap)
+      }
+    }
+//    binningCountList.forEach {  }
+    eventSink?.success(hashMapList)
   }
 
 
