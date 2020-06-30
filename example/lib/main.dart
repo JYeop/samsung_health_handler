@@ -95,8 +95,7 @@ class _MyAppState extends State<MyApp> {
                     try {
 //                    Must be called after initialized
 //                    gets date of 2020/06/30
-//                    Recommend you to make time with iso8061 standard.
-                      int timestampFromLocalTime = DateTime.parse('2020-06-30T23:59:59+09:00').millisecondsSinceEpoch;
+                      int timestampFromLocalTime = DateTime.parse('2020-06-30T00:00:00.000Z').millisecondsSinceEpoch;
                       StepCountDataType res = await SamsungHealthHandler.getStepCount(timestampFromLocalTime);
                       print(res.timestamp);
                       print(DateTime.fromMillisecondsSinceEpoch(res.timestamp));
@@ -113,7 +112,7 @@ class _MyAppState extends State<MyApp> {
                   stream: stepStream,
                   builder: (BuildContext context, AsyncSnapshot<StepCountDataType> snapshot) {
                     try {
-                      print(snapshot.data);
+                      print(snapshot.data.stepCount);
                       if (snapshot.data != null) {
                         var timestamp = snapshot.data.timestamp;
                         var date = DateTime.fromMillisecondsSinceEpoch(timestamp);

@@ -12,3 +12,9 @@ fixed readme
 
 ## 0.2.2
 Fixed Readme.md to recommend using iso standard.
+
+## 0.2.3
+Fixed Readme.md. => How to get exact data when passing timestamp.
+
+## 0.2.4
+Fixed typo.
