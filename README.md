@@ -45,10 +45,12 @@ So, If you want to reinitialize SamsungHealthHandler, **you must manually dispos
 ## Sample Usage
 ```Dart
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:samsung_health_handler/StepCountDataType.dart';
 import 'package:samsung_health_handler/samsung_health_handler.dart';
 
 void main() {
+  Intl.defaultLocale = 'ko_KR';
   runApp(MyApp());
 }
 
@@ -58,7 +60,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  Stream<StepCountDataType> stepStream = SamsungHealthHandler.stepCountStream;
+  Stream<StepCountDataType> stepStream = SamsungHealthHandler.stream;
   bool loading = true;
 
   @override
@@ -102,7 +104,7 @@ class _MyAppState extends State<MyApp> {
           child: Center(
             child: Column(
               children: <Widget>[
-                                Row(
+                Row(
                   children: <Widget>[
 //                        Calls data of 2020/04/05
                     RaisedButton(
@@ -138,8 +140,11 @@ class _MyAppState extends State<MyApp> {
                   onPressed: () async {
                     try {
 //                    Must be called after initialized
-//                  gets date of 2020/06/01
-                      StepCountDataType res = await SamsungHealthHandler.getStepCount(1590969600000);
+//                    gets date of 2020/06/30
+//                    Recommend you to make time with iso8061 standard.
+                      int timestampFromLocalTime = DateTime.parse('2020-06-30T23:59:59+09:00').millisecondsSinceEpoch;
+                      StepCountDataType res = await SamsungHealthHandler.getStepCount(timestampFromLocalTime);
+                      print(res.timestamp);
                       print(DateTime.fromMillisecondsSinceEpoch(res.timestamp));
                       print(res.stepCount);
                       print(res.distance);
@@ -209,4 +214,5 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
+
 ```# samsung_health_flutter_sdk
