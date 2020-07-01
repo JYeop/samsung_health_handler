@@ -140,14 +140,20 @@ class _MyAppState extends State<MyApp> {
                   onPressed: () async {
                     try {
 //                    Must be called after initialized
-//                    gets date of 2020/06/30
-                      int timestampFromLocalTime = DateTime.parse('2020-06-30T00:00:00.000Z').millisecondsSinceEpoch;
+//                    gets date of 2020/07/01
+                      int timestampFromLocalTime = DateTime.parse('2020-07-01T00:00:00.000Z').millisecondsSinceEpoch;
                       StepCountDataType res = await SamsungHealthHandler.getStepCount(timestampFromLocalTime);
                       print(res.timestamp);
                       print(DateTime.fromMillisecondsSinceEpoch(res.timestamp));
                       print(res.stepCount);
                       print(res.distance);
                       print(res.calorie);
+                      if (res.binningData != null) {
+                        res.binningData.forEach((element) {
+                          print(element.toJson());
+                        });
+                      }
+//                      print('binningData // ${res.binningData}');
                     } catch (error) {
                       print(error);
                     }
@@ -167,34 +173,37 @@ class _MyAppState extends State<MyApp> {
                         var calorie = snapshot.data.calorie;
                         var distance = snapshot.data.distance;
                         var binningData = snapshot.data.binningData;
-                        print(binningData);
+//                        binningData.forEach((element) {
+//                          print(element.toJson());
+//                        });
                         return Column(
                           children: <Widget>[
                             Text('date: $date'),
                             Text('steps: $steps'),
                             Text('calorie: $calorie'),
                             Text('distance: $distance'),
-                            ListView.separated(
-                              shrinkWrap: true,
-                              physics: NeverScrollableScrollPhysics(),
-                              itemCount: binningData.length,
-                              separatorBuilder: (BuildContext context, int index) => Divider(
-                                height: 3,
+                            if (binningData != null)
+                              ListView.separated(
+                                shrinkWrap: true,
+                                physics: NeverScrollableScrollPhysics(),
+                                itemCount: binningData.length,
+                                separatorBuilder: (BuildContext context, int index) => Divider(
+                                  height: 3,
+                                ),
+                                itemBuilder: (BuildContext context, int index) {
+                                  var binningValue = binningData[index];
+                                  var binningTime = binningValue.time;
+                                  var binningStepCount = binningValue.stepCount;
+                                  return ListTile(
+                                    title: Column(
+                                      children: <Widget>[
+                                        Text('time: $binningTime'),
+                                        Text('steps: $binningStepCount'),
+                                      ],
+                                    ),
+                                  );
+                                },
                               ),
-                              itemBuilder: (BuildContext context, int index) {
-                                var binningValue = binningData[index];
-                                var binningTime = binningValue.time;
-                                var binningStepCount = binningValue.stepCount;
-                                return ListTile(
-                                  title: Column(
-                                    children: <Widget>[
-                                      Text('time: $binningTime'),
-                                      Text('steps: $binningStepCount'),
-                                    ],
-                                  ),
-                                );
-                              },
-                            ),
                           ],
                         );
                       } else {

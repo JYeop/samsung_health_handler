@@ -14,20 +14,27 @@ class SamsungHealthHandler {
   static StreamController<StepCountDataType> streamController = StreamController.broadcast();
 
   // ignore: top_level_function_literal_block
-  static Stream<StepCountDataType> get stream =>
-      SamsungHealthHandler.stepChannel.receiveBroadcastStream().map((event) {
+  static Stream<StepCountDataType> get stream => SamsungHealthHandler.stepChannel.receiveBroadcastStream().map((event) {
         if (event.runtimeType.toString() != 'List<dynamic>') {
           final Map<String, dynamic> data = Map.from(event);
-          samsungHandlerValueHandler.stepCountState.add(StepCountDataType.fromJson({
-            ...data,
-            ...{
-              'binningData': samsungHandlerValueHandler.stepCountState.value.binningData,
-            }
-          }));
+          var today = DateTime.now();
+          if (DateTime.fromMillisecondsSinceEpoch(data['timestamp']).difference(today).inDays >= 0) {
+            samsungHandlerValueHandler.stepCountState.add(StepCountDataType.fromJson({
+              ...data,
+              ...{'binningData': null}
+            }));
+          } else {
+            samsungHandlerValueHandler.stepCountState.add(StepCountDataType.fromJson({
+              ...data,
+              ...{
+                'binningData': samsungHandlerValueHandler.stepCountState.value.binningData,
+              }
+            }));
+          }
         } else {
           List<dynamic> newArr = List.from(event);
           var stepCountBinningData = newArr.map((e) {
-            print(e);
+//            print(e);
             return StepCountBinningDataType.fromJson({
               ...e,
               'receivedAt': DateTime.now().millisecondsSinceEpoch,
@@ -94,14 +101,21 @@ class SamsungHealthHandler {
   static Future<StepCountDataType> getStepCount(int millisecondTimestamp) async {
     passTimestamp(millisecondTimestamp);
     StepCountDataType result = StepCountDataType.fromJson({});
+    var today = DateTime.now();
     try {
       var intList = new List<int>.generate(10, (i) => i + 1);
       await Future.forEach(intList, (_) async {
-        await Future.delayed(Duration(milliseconds: 5));
+        await Future.delayed(Duration(milliseconds: 30));
         var passedTime = DateTime.fromMillisecondsSinceEpoch(millisecondTimestamp);
         var value = samsungHandlerValueHandler.stepCountState.value;
         var dateTime = DateTime.fromMillisecondsSinceEpoch(value.timestamp);
         if (dateTime.day == passedTime.day && dateTime.month == passedTime.month && dateTime.year == passedTime.year) {
+          if (passedTime.difference(today).inDays >= 0) {
+            var newValue = samsungHandlerValueHandler.stepCountState.value.toJson();
+            newValue['binningData'] = null;
+//            [StepCountBinningDataType.fromJson({})];
+            result = StepCountDataType.fromJson(newValue);
+          }
           result = value;
           return;
         }

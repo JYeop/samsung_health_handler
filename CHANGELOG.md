@@ -18,3 +18,7 @@ Fixed Readme.md. => How to get exact data when passing timestamp.
 
 ## 0.2.4
 Fixed typo.
+
+
+## 0.2.5
+Fixed comes wrong binning data when the binning data of current date does not exist.
