@@ -43,4 +43,5 @@ dependencies {
     implementation files('samsung-health-data-v1.4.0.jar')
 //    implementation fileTree(dir: 'libs', include: '*.jar')
     implementation "com.google.code.gson:gson:2.8.5"
+    implementation 'com.android.support:support-annotations:28.0.0'
 }
