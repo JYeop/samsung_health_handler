@@ -1,6 +1,12 @@
 # samsung_health_handler
 
 This package is currently on development. So, if you want stability, i do not recommend you to use this. 
+##Important
+To use samsung-health api, you must be authorized partner.
+https://stackoverflow.com/a/41677496
+
+On debug mode, you can use it.
+https://developer.samsung.com/health/android/data/guide/dev-mode.html
 
 ## Coverage
 Currently, this package only supports step count data.  

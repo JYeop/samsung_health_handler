@@ -38,7 +38,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "kr.concat.samsung_health_handler_example"
+        applicationId "com.samsung.android.app.stepdiary"
         minSdkVersion 23
         targetSdkVersion 28
         versionCode flutterVersionCode.toInteger()

@@ -1,7 +1,7 @@
 name: samsung_health_handler
 description: Helps to integrate flutter with the Samsung-health-app. The Samsung health app is
   must be installed to use this.
-version: 0.2.5
+version: 0.2.7
 homepage: https://github.com/JYeop/samsung_health_handler
 
 environment:
@@ -12,6 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
   rxdart: ^0.24.1
+  characters: ^1.0.0
 
 dev_dependencies:
   flutter_test:

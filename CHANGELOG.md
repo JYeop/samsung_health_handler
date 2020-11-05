@@ -22,3 +22,12 @@ Fixed typo.
 
 ## 0.2.5
 Fixed comes wrong binning data when the binning data of current date does not exist.
+
+
+## 0.2.6
+Fixed bug: stream comes null on release mode.
+
+
+
+## 0.2.7
+Added important notification

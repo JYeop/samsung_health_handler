@@ -13,25 +13,13 @@ class SamsungHealthHandler {
   // ignore: close_sinks
   static StreamController<StepCountDataType> streamController = StreamController.broadcast();
 
-  // ignore: top_level_function_literal_block
   static Stream<StepCountDataType> get stream => SamsungHealthHandler.stepChannel.receiveBroadcastStream().map((event) {
-        if (event.runtimeType.toString() != 'List<dynamic>') {
-          final Map<String, dynamic> data = Map.from(event);
-          var today = DateTime.now();
-          if (DateTime.fromMillisecondsSinceEpoch(data['timestamp']).difference(today).inDays >= 0) {
-            samsungHandlerValueHandler.stepCountState.add(StepCountDataType.fromJson({
-              ...data,
-              ...{'binningData': null}
-            }));
-          } else {
-            samsungHandlerValueHandler.stepCountState.add(StepCountDataType.fromJson({
-              ...data,
-              ...{
-                'binningData': samsungHandlerValueHandler.stepCountState.value.binningData,
-              }
-            }));
-          }
-        } else {
+        print('@@@@@@@@@@@@@@@@@');
+        print(event);
+        print(event.runtimeType.toString());
+        print(event.runtimeType.toString() != 'List<dynamic>');
+        print('!!!!!!!!!!!!!!!!!!!!!!!');
+        if (event.runtimeType.toString().contains('List<dynamic>')) {
           List<dynamic> newArr = List.from(event);
           var stepCountBinningData = newArr.map((e) {
 //            print(e);
@@ -47,6 +35,22 @@ class SamsungHealthHandler {
               'binningData': stepCountBinningData,
             }
           }));
+        } else {
+          final Map<String, dynamic> data = Map.from(event);
+          var today = DateTime.now();
+          if (DateTime.fromMillisecondsSinceEpoch(data['timestamp']).difference(today).inDays >= 0) {
+            samsungHandlerValueHandler.stepCountState.add(StepCountDataType.fromJson({
+              ...data,
+              ...{'binningData': null}
+            }));
+          } else {
+            samsungHandlerValueHandler.stepCountState.add(StepCountDataType.fromJson({
+              ...data,
+              ...{
+                'binningData': samsungHandlerValueHandler.stepCountState.value.binningData,
+              }
+            }));
+          }
         }
         return samsungHandlerValueHandler.stepCountState.value;
       });

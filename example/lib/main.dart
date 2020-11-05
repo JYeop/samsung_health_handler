@@ -49,6 +49,8 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    print(samsungHandlerValueHandler.stepCountState.value.toJson().toString());
+
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
@@ -62,7 +64,7 @@ class _MyAppState extends State<MyApp> {
                   children: <Widget>[
 //                        Calls data of 2020/04/05
                     RaisedButton(
-                      child: Text('4/5'),
+                      child: Text('today'),
                       onPressed: () {
                         SamsungHealthHandler.passTimestamp(DateTime.now().millisecondsSinceEpoch);
                       },
@@ -116,10 +118,11 @@ class _MyAppState extends State<MyApp> {
                 ),
                 StreamBuilder<StepCountDataType>(
                   stream: stepStream,
+                  initialData: StepCountDataType.fromJson({}),
                   builder: (BuildContext context, AsyncSnapshot<StepCountDataType> snapshot) {
-                    try {
-                      print(snapshot.data.stepCount);
-                      if (snapshot.data != null) {
+                    if (snapshot.hasData) {
+                      try {
+                        print(snapshot.data.toString());
                         var timestamp = snapshot.data.timestamp;
                         var date = DateTime.fromMillisecondsSinceEpoch(timestamp);
                         var steps = snapshot.data.stepCount;
@@ -127,9 +130,6 @@ class _MyAppState extends State<MyApp> {
                         var calorie = snapshot.data.calorie;
                         var distance = snapshot.data.distance;
                         var binningData = snapshot.data.binningData;
-//                        binningData.forEach((element) {
-//                          print(element.toJson());
-//                        });
                         return Column(
                           children: <Widget>[
                             Text('date: $date'),
@@ -160,12 +160,11 @@ class _MyAppState extends State<MyApp> {
                               ),
                           ],
                         );
-                      } else {
-                        return Text('data of current date does not exist.');
+                      } catch (error) {
+                        return Text('error: $error');
                       }
-                    } catch (error) {
-                      return Text('error: $error');
                     }
+                    return Text('data of current date does not exist. 2222');
                   },
                 ),
               ],
