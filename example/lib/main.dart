@@ -97,7 +97,16 @@ class _MyAppState extends State<MyApp> {
                     try {
 //                    Must be called after initialized
 //                    gets date of 2020/07/01
-                      int timestampFromLocalTime = DateTime.parse('2020-07-01T00:00:00.000Z').millisecondsSinceEpoch;
+                      print(DateTime.parse('2020-11-10T00:00:00.000Z').millisecondsSinceEpoch);
+                      int timestampFromLocalTime =
+                          // 1593561600000 삼성헬스
+                          // 1604880000000 위플
+                          // DateTime.parse('2020-11-01T00:00:00.000Z').millisecondsSinceEpoch;
+                          DateTime.now().millisecondsSinceEpoch;
+                      // DateTime.parse('2020-07-01T00:00:00.000Z').millisecondsSinceEpoch;
+                      var today = DateTime.now();
+                      print('@@@@@@@@@@@@@');
+                      print(DateTime.fromMillisecondsSinceEpoch(timestampFromLocalTime).difference(today).inDays);
                       StepCountDataType res = await SamsungHealthHandler.getStepCount(timestampFromLocalTime);
                       print(res.timestamp);
                       print(DateTime.fromMillisecondsSinceEpoch(res.timestamp));
