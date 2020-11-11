@@ -71,7 +71,7 @@ class _MyAppState extends State<MyApp> {
                     ),
                     RaisedButton(
                       child: Text('prevDate'),
-                      onPressed: () {
+                      onPressed: () async {
                         SamsungHealthHandler.prevDate();
                       },
                     ),
@@ -104,6 +104,11 @@ class _MyAppState extends State<MyApp> {
                       print(res.stepCount);
                       print(res.distance);
                       print(res.calorie);
+                      // res.binningData.forEach((element) {
+                      //     print(element.toJson());
+                      // });
+                      // print('바이닝?');
+                      // print(res.binningData);
                       if (res.binningData != null) {
                         res.binningData.forEach((element) {
                           print(element.toJson());
@@ -130,6 +135,7 @@ class _MyAppState extends State<MyApp> {
                         var calorie = snapshot.data.calorie;
                         var distance = snapshot.data.distance;
                         var binningData = snapshot.data.binningData;
+                        print(binningData);
                         return Column(
                           children: <Widget>[
                             Text('date: $date'),

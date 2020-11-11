@@ -14,11 +14,11 @@ class SamsungHealthHandler {
   static StreamController<StepCountDataType> streamController = StreamController.broadcast();
 
   static Stream<StepCountDataType> get stream => SamsungHealthHandler.stepChannel.receiveBroadcastStream().map((event) {
-        print('@@@@@@@@@@@@@@@@@');
-        print(event);
-        print(event.runtimeType.toString());
-        print(event.runtimeType.toString() != 'List<dynamic>');
-        print('!!!!!!!!!!!!!!!!!!!!!!!');
+        // print('@@@@@@@@@@@@@@@@@');
+        // print(event);
+        // print(event.runtimeType.toString());
+        // print(event.runtimeType.toString() != 'List<dynamic>');
+        // print('!!!!!!!!!!!!!!!!!!!!!!!');
         if (event.runtimeType.toString().contains('List<dynamic>')) {
                   // print('!!!!들갔누!!!!!!!!!!!!!!!!!!!');
           List<dynamic> newArr = List.from(event);

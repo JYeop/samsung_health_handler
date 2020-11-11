@@ -7,7 +7,7 @@ homepage: https://github.com/JYeop/samsung_health_handler
 environment:
   sdk: ">=2.7.0 <3.0.0"
   flutter: ">=1.10.0"
-publish_to: pub.dev
+
 dependencies:
   flutter:
     sdk: flutter
