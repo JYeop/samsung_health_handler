@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:flutter/services.dart';
 import 'package:rxdart/rxdart.dart';
@@ -7,20 +6,23 @@ import 'package:samsung_health_handler/StepCountDataType.dart';
 
 class SamsungHealthHandler {
   static const MethodChannel channel = const MethodChannel('samsung_health_handler');
-  static const EventChannel stepChannel = EventChannel('samsung_health_handler_event_steps_channel');
-  static const EventChannel connectionChannel = EventChannel('samsung_health_handler_event_connection_channel');
+  static const EventChannel stepChannel =
+      EventChannel('samsung_health_handler_event_steps_channel');
+  static const EventChannel connectionChannel =
+      EventChannel('samsung_health_handler_event_connection_channel');
 
   // ignore: close_sinks
   static StreamController<StepCountDataType> streamController = StreamController.broadcast();
 
-  static Stream<StepCountDataType> get stream => SamsungHealthHandler.stepChannel.receiveBroadcastStream().map((event) {
-        // print('@@@@@@@@@@@@@@@@@');
-        // print(event);
-        // print(event.runtimeType.toString());
-        // print(event.runtimeType.toString() != 'List<dynamic>');
-        // print('!!!!!!!!!!!!!!!!!!!!!!!');
+  static Stream<StepCountDataType> get stream =>
+      SamsungHealthHandler.stepChannel.receiveBroadcastStream().map((event) {
+        print('@@@@@@@@@@@@@@@@@');
+        print(event);
+        print(event.runtimeType.toString());
+        print(event.runtimeType.toString() != 'List<dynamic>');
+        print('!!!!!!!!!!!!!!!!!!!!!!!');
         if (event.runtimeType.toString().contains('List<dynamic>')) {
-                  // print('!!!!들갔누!!!!!!!!!!!!!!!!!!!');
+          // print('!!!!들갔누!!!!!!!!!!!!!!!!!!!');
           List<dynamic> newArr = List.from(event);
           var stepCountBinningData = newArr.map((e) {
 //            print(e);
@@ -29,7 +31,7 @@ class SamsungHealthHandler {
               'receivedAt': DateTime.now().millisecondsSinceEpoch,
             });
           }).toList();
-          var stepCountData = samsungHandlerValueHandler.stepCountState.value.toJson();
+          var stepCountData = samsungHandlerValueHandler.stepCountState.value!.toJson();
           samsungHandlerValueHandler.stepCountState.add(StepCountDataType.fromJson({
             ...stepCountData,
             ...{
@@ -41,7 +43,8 @@ class SamsungHealthHandler {
           var today = DateTime.now();
           // print('이잉...');
           // print(DateTime.fromMillisecondsSinceEpoch(data['timestamp']).difference(today).inDays);
-          if (DateTime.fromMillisecondsSinceEpoch(data['timestamp']).difference(today).inDays >= 0) {
+          if (DateTime.fromMillisecondsSinceEpoch(data['timestamp']).difference(today).inDays >=
+              0) {
             samsungHandlerValueHandler.stepCountState.add(StepCountDataType.fromJson({
               ...data,
               ...{'binningData': null}
@@ -50,12 +53,12 @@ class SamsungHealthHandler {
             samsungHandlerValueHandler.stepCountState.add(StepCountDataType.fromJson({
               ...data,
               ...{
-                'binningData': samsungHandlerValueHandler.stepCountState.value.binningData,
+                'binningData': samsungHandlerValueHandler.stepCountState.value?.binningData,
               }
             }));
           }
         }
-        return samsungHandlerValueHandler.stepCountState.value;
+        return samsungHandlerValueHandler.stepCountState.value!;
       });
 
   // ignore: top_level_function_literal_block
@@ -115,10 +118,17 @@ class SamsungHealthHandler {
         await Future.delayed(Duration(milliseconds: 30));
         var passedTime = DateTime.fromMillisecondsSinceEpoch(millisecondTimestamp);
         var value = samsungHandlerValueHandler.stepCountState.value;
-        var dateTime = DateTime.fromMillisecondsSinceEpoch(value.timestamp);
-        if (dateTime.day == passedTime.day && dateTime.month == passedTime.month && dateTime.year == passedTime.year) {
+        var dateTime = DateTime.fromMillisecondsSinceEpoch(value!.timestamp);
+        var newValue = samsungHandlerValueHandler.stepCountState.value!.toJson();
+        print('@@@@@@@@@@@@22222223');
+        print(newValue);
+        if (dateTime.day == passedTime.day &&
+            dateTime.month == passedTime.month &&
+            dateTime.year == passedTime.year) {
           if (passedTime.difference(today).inDays >= 0) {
-            var newValue = samsungHandlerValueHandler.stepCountState.value.toJson();
+            var newValue = samsungHandlerValueHandler.stepCountState.value!.toJson();
+            // print('@@@@@@@@@@@@');
+            // print(newValue);
             newValue['binningData'] = null;
 //            [StepCountBinningDataType.fromJson({})];
             result = StepCountDataType.fromJson(newValue);

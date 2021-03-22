@@ -1,17 +1,17 @@
 class StepCountDataType {
 //  final bool isConnected;
   final int stepCount;
-  final int calorie;
-  final double distance;
+  final int? calorie;
+  final double? distance;
   final int timestamp;
-  final String error;
-  final List<StepCountBinningDataType> binningData;
+  final String? error;
+  final List<StepCountBinningDataType>? binningData;
 
   StepCountDataType({
-    this.stepCount,
+    required this.stepCount,
     this.calorie,
     this.distance,
-    this.timestamp,
+    required this.timestamp,
     this.error,
     this.binningData,
   });
@@ -39,10 +39,10 @@ class StepCountDataType {
 
 class StepCountBinningDataType {
 //  final bool isConnected;
-  final int stepCount;
-  final String time;
-  final int receivedAt;
-  final String error;
+  final int? stepCount;
+  final String? time;
+  final int? receivedAt;
+  final String? error;
 
   StepCountBinningDataType({
     this.stepCount,

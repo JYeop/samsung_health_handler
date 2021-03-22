@@ -49,7 +49,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    print(samsungHandlerValueHandler.stepCountState.value.toJson().toString());
+    // print(samsungHandlerValueHandler.stepCountState.toJson().toString());
 
     return MaterialApp(
       home: Scaffold(
@@ -106,8 +106,11 @@ class _MyAppState extends State<MyApp> {
                       // DateTime.parse('2020-07-01T00:00:00.000Z').millisecondsSinceEpoch;
                       var today = DateTime.now();
                       print('@@@@@@@@@@@@@');
-                      print(DateTime.fromMillisecondsSinceEpoch(timestampFromLocalTime).difference(today).inDays);
-                      StepCountDataType res = await SamsungHealthHandler.getStepCount(timestampFromLocalTime);
+                      print(DateTime.fromMillisecondsSinceEpoch(timestampFromLocalTime)
+                          .difference(today)
+                          .inDays);
+                      StepCountDataType res =
+                          await SamsungHealthHandler.getStepCount(timestampFromLocalTime);
                       print(res.timestamp);
                       print(DateTime.fromMillisecondsSinceEpoch(res.timestamp));
                       print(res.stepCount);
