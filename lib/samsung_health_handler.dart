@@ -118,23 +118,25 @@ class SamsungHealthHandler {
         await Future.delayed(Duration(milliseconds: 30));
         var passedTime = DateTime.fromMillisecondsSinceEpoch(millisecondTimestamp);
         var value = samsungHandlerValueHandler.stepCountState.value;
-        var dateTime = DateTime.fromMillisecondsSinceEpoch(value!.timestamp);
-        var newValue = samsungHandlerValueHandler.stepCountState.value!.toJson();
-        print('@@@@@@@@@@@@22222223');
-        print(newValue);
-        if (dateTime.day == passedTime.day &&
-            dateTime.month == passedTime.month &&
-            dateTime.year == passedTime.year) {
-          if (passedTime.difference(today).inDays >= 0) {
-            var newValue = samsungHandlerValueHandler.stepCountState.value!.toJson();
-            // print('@@@@@@@@@@@@');
-            // print(newValue);
-            newValue['binningData'] = null;
+        if (value != null) {
+          var dateTime = DateTime.fromMillisecondsSinceEpoch(value.timestamp);
+          // var newValue = samsungHandlerValueHandler.stepCountState.value!.toJson();
+          // print('@@@@@@@@@@@@22222223');
+          // print(newValue);
+          if (dateTime.day == passedTime.day &&
+              dateTime.month == passedTime.month &&
+              dateTime.year == passedTime.year) {
+            if (passedTime.difference(today).inDays >= 0) {
+              var newValue = samsungHandlerValueHandler.stepCountState.value!.toJson();
+              // print('@@@@@@@@@@@@');
+              // print(newValue);
+              newValue['binningData'] = null;
 //            [StepCountBinningDataType.fromJson({})];
-            result = StepCountDataType.fromJson(newValue);
+              result = StepCountDataType.fromJson(newValue);
+            }
+            result = value;
+            return;
           }
-          result = value;
-          return;
         }
       });
       return result;
