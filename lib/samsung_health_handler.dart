@@ -85,8 +85,8 @@ class SamsungHealthHandler {
   }
 
   static Future<Map<String, dynamic>> isPermissionAcquired() async {
-    final Map<String, dynamic> result = await channel.invokeMethod('isPermissionAcquired');
-    return result;
+    final result = await channel.invokeMethod('isPermissionAcquired');
+    return new Map<String, dynamic>.from(result);
   }
 
   static Future<dynamic> requestPermission() async {
