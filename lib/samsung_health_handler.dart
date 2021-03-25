@@ -143,7 +143,6 @@ class SamsungHealthHandler {
               // print('@@@@@@@@@@@@');
               // print(newValue);
               newValue['binningData'] = null;
-//            [StepCountBinningDataType.fromJson({})];
               result = StepCountDataType.fromJson(newValue);
             }
             result = value;
