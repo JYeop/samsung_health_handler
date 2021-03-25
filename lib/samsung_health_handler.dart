@@ -70,10 +70,13 @@ class SamsungHealthHandler {
 
   static Future<bool> initialize() async {
     bool isConnected = false;
+    bool permissionAcquired = false;
     channel.invokeMethod('initialize');
     var res = SamsungHealthHandler.connectionStream.takeWhile((element) {
+      if (element['requestPermissionResult'] != null) isConnected = true;
+      // permissionAcquired = element['requestPermissionResult'];
       if (element['isConnected'] == true) isConnected = true;
-      return element['isConnected'] == null;
+      return element['isConnected'] != null || element['requestPermissionResult'] != null;
     });
 //    돌기까지 기다림
     await res.isEmpty;
