@@ -3,13 +3,14 @@ import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:samsung_health_handler/StepCountDataType.dart';
+
 //
-// class SamsungHealthHandlerInitialize {
-//   bool isConnected;
-//   bool permissionAcquired;
-//
-//   SamsungHealthHandlerInitialize({required this.isConnected, required this.permissionAcquired});
-// }
+class SamsungHealthHandlerInitialize {
+  bool isConnected;
+  bool permissionAcquired;
+
+  SamsungHealthHandlerInitialize({required this.isConnected, required this.permissionAcquired});
+}
 
 class SamsungHealthHandler {
   static const MethodChannel channel = const MethodChannel('samsung_health_handler');
@@ -73,23 +74,34 @@ class SamsungHealthHandler {
         return data;
       });
 
-  static Future<bool> initialize() async {
+  static Future<SamsungHealthHandlerInitialize> initialize() async {
     bool isConnected = false;
     // bool permissionAcquired;
     channel.invokeMethod('initialize');
-    // var result = SamsungHealthHandlerInitialize(isConnected: false, permissionAcquired: false);
+    var result = SamsungHealthHandlerInitialize(isConnected: false, permissionAcquired: false);
     var res = SamsungHealthHandler.connectionStream.takeWhile((element) {
       // print('@@@@@@@@@@@@');
       // print(element);
       // print('@@!12121212');
       // if (element['requestPermissionResult'] != null) result.permissionAcquired = true;
       // permissionAcquired = element['requestPermissionResult'];
-      if (element['isConnected'] == true) isConnected = true;
+      if (element['isConnected'] == true) result.isConnected = true;
       return element['isConnected'] == null;
+    });
+    var permissionRes = SamsungHealthHandler.connectionStream.takeWhile((element) {
+      // print('@@@@@@@@@@@@');
+      // print(element);
+      // print('@@!12121212');
+      // if (element['requestPermissionResult'] != null) result.permissionAcquired = true;
+      // permissionAcquired = element['requestPermissionResult'];
+      if (element['requestPermissionResult'] != null) result.permissionAcquired = true;
+      return element['requestPermissionResult'] == null;
     });
 //    돌기까지 기다림
     await res.isEmpty;
-    return isConnected;
+    await permissionRes.isEmpty;
+
+    return result;
   }
 
   static void dispose() async {
