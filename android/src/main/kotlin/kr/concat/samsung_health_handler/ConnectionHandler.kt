@@ -75,6 +75,7 @@ class ConnectionHandler(
       hashMap["requestPermissionResult"] = true
       eventSink?.success(hashMap);
     }
+    mReporter.requestDailyStepCount(StepCountReader.TODAY_START_UTC_TIME)
   }
 
   override fun onConnected() {
