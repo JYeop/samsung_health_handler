@@ -66,10 +66,12 @@ class ConnectionHandler(
     val hashMap = HashMap<String, Boolean>()
     // Show a permission alarm and clear step count if permissions are not acquired
     if (resultMap.containsValue(false)) {
+      hashMap["isConnected"] = true;
       hashMap["requestPermissionResult"] = false
       eventSink?.success(hashMap);
     } else {
       mReporter.requestDailyStepCount(StepCountReader.TODAY_START_UTC_TIME)
+      hashMap["isConnected"] = true;
       hashMap["requestPermissionResult"] = true
       eventSink?.success(hashMap);
     }
@@ -79,11 +81,14 @@ class ConnectionHandler(
       val hashMap = HashMap<String, Boolean>()
     if (isPermissionAcquired()["result"] == true) {
       mReporter.requestDailyStepCount(StepCountReader.TODAY_START_UTC_TIME)
+      hashMap["requestPermissionResult"] = true
+      hashMap["isConnected"] = true;
+      eventSink?.success(hashMap);
     } else {
       requestPermission()
     }
-    hashMap["isConnected"] = true;
-    eventSink?.success(hashMap);
+//    hashMap["isConnected"] = true;
+//    eventSink?.success(hashMap);
   }
 
   override fun onConnectionFailed(error: HealthConnectionErrorResult) {

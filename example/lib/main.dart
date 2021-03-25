@@ -32,18 +32,25 @@ class _MyAppState extends State<MyApp> {
   }
 
   initialize() async {
-    var isInitialized = await SamsungHealthHandler.initialize();
-    print('이니셜라이즈?');
-    print(isInitialized.permissionAcquired);
-    print(isInitialized.isConnected);
-    if (isInitialized.isConnected) {
-      var req = await SamsungHealthHandler.requestPermission();
-      print('퍼미션???????');
-      print(req);
-      setState(() {
-        loading = false;
-      });
-    }
+    // print('1이니셜라이즈?');
+    // var isInitialized = await SamsungHealthHandler.initialize();
+    // print('이니셜라이즈?');
+    // // print(isInitialized.permissionAcquired);
+    // print(isInitialized.isConnected);
+    // if (isInitialized.isConnected) {
+    //   // var req = await SamsungHealthHandler.requestPermission();
+    //   // print('퍼미션???????');
+    //   // print(req);
+    //   setState(() {
+    //     loading = false;
+    //   });
+    //   SamsungHealthHandler.passTimestamp(DateTime.now().millisecondsSinceEpoch);
+    // }
+
+    setState(() {
+      loading = false;
+    });
+    SamsungHealthHandler.passTimestamp(DateTime.now().millisecondsSinceEpoch);
   }
 
   disposeSamsungHealth() async {
@@ -111,7 +118,7 @@ class _MyAppState extends State<MyApp> {
                           DateTime.now().millisecondsSinceEpoch;
                       // DateTime.parse('2020-07-01T00:00:00.000Z').millisecondsSinceEpoch;
                       var today = DateTime.now();
-                      print('@@@@@@@@@@@@@');
+                      // print('@@@@@@@@@@@@@');
                       print(DateTime.fromMillisecondsSinceEpoch(timestampFromLocalTime)
                           .difference(today)
                           .inDays);
@@ -139,13 +146,16 @@ class _MyAppState extends State<MyApp> {
                   },
                   child: Text('getStepCount once'),
                 ),
-                StreamBuilder<StepCountDataType>(
-                  stream: stepStream,
-                  initialData: StepCountDataType.fromJson({}),
-                  builder: (BuildContext context, AsyncSnapshot<StepCountDataType> snapshot) {
-                    if (snapshot.hasData) {
-                      try {
-                        print(snapshot.data.toString());
+                if (!loading)
+                  StreamBuilder<StepCountDataType>(
+                    stream: stepStream,
+                    initialData: StepCountDataType.fromJson({}),
+                    builder: (BuildContext context, AsyncSnapshot<StepCountDataType> snapshot) {
+                      // if (snapshot.connectionState)
+                      if (snapshot.data?.timestamp != null) {
+                        // try {
+                        print('jqwioejqwiojeioqwjoi');
+                        print(snapshot.data.toJson());
                         var timestamp = snapshot.data.timestamp;
                         var date = DateTime.fromMillisecondsSinceEpoch(timestamp);
                         var steps = snapshot.data.stepCount;
@@ -184,13 +194,13 @@ class _MyAppState extends State<MyApp> {
                               ),
                           ],
                         );
-                      } catch (error) {
-                        return Text('error: $error');
+                        // } catch (error) {
+                        //   return Text('error: $error');
+                        // }
                       }
-                    }
-                    return Text('data of current date does not exist. 2222');
-                  },
-                ),
+                      return Text('data of current date does not exist. 2222');
+                    },
+                  ),
               ],
             ),
           ),
