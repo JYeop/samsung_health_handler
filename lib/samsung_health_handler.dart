@@ -41,8 +41,6 @@ class SamsungHealthHandler {
         } else {
           final Map<String, dynamic> data = Map.from(event);
           var today = DateTime.now();
-          // print('이잉...');
-          // print(DateTime.fromMillisecondsSinceEpoch(data['timestamp']).difference(today).inDays);
           if (DateTime.fromMillisecondsSinceEpoch(data['timestamp']).difference(today).inDays >=
               0) {
             samsungHandlerValueHandler.stepCountState.add(StepCountDataType.fromJson({
