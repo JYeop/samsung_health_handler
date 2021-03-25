@@ -84,8 +84,8 @@ class SamsungHealthHandler {
     channel.invokeMethod('dispose');
   }
 
-  static Future<dynamic> isPermissionAcquired() async {
-    final dynamic result = await channel.invokeMethod('isPermissionAcquired');
+  static Future<Map<String, dynamic>> isPermissionAcquired() async {
+    final Map<String, dynamic> result = await channel.invokeMethod('isPermissionAcquired');
     return result;
   }
 
@@ -118,8 +118,8 @@ class SamsungHealthHandler {
         await Future.delayed(Duration(milliseconds: 30));
         var passedTime = DateTime.fromMillisecondsSinceEpoch(millisecondTimestamp);
         var value = samsungHandlerValueHandler.stepCountState.value;
-        if (value != null && value.timestamp != null) {
-          var dateTime = DateTime.fromMillisecondsSinceEpoch(value.timestamp);
+        if (value?.timestamp != null) {
+          var dateTime = DateTime.fromMillisecondsSinceEpoch(value!.timestamp);
           // var newValue = samsungHandlerValueHandler.stepCountState.value!.toJson();
           // print('@@@@@@@@@@@@22222223');
           // print(newValue);
