@@ -159,7 +159,6 @@ class SamsungHealthHandler {
         var passedTime = DateTime.fromMillisecondsSinceEpoch(millisecondTimestamp);
         var value = samsungHandlerValueHandler.stepCountState.value;
         if (value?.timestamp != null) {
-          // print('!!!!!!!!!!!!!!!!!!! ${value?.timestamp}');
           var dateTime = DateTime.fromMillisecondsSinceEpoch(value!.timestamp);
           // var newValue = samsungHandlerValueHandler.stepCountState.value!.toJson();
           // print('@@@@@@@@@@@@22222223');
@@ -169,16 +168,16 @@ class SamsungHealthHandler {
               dateTime.year == passedTime.year) {
             if (passedTime.difference(today).inDays >= 0) {
               var newValue = samsungHandlerValueHandler.stepCountState.value!.toJson();
-              // print('으아아아ㅏ@@@@@@@@@@@@');
+              // print('@@@@@@@@@@@@');
               // print(newValue);
               newValue['binningData'] = null;
               result = StepCountDataType.fromJson(newValue);
             }
             result = value;
-            return result;
+            return;
           }
         }
-        return result;
+        return;
       });
       return result;
     } catch (error) {
