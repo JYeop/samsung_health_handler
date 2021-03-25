@@ -74,7 +74,7 @@ class SamsungHealthHandler {
       if (element['requestPermissionResult'] != null) isConnected = true;
       // permissionAcquired = element['requestPermissionResult'];
       if (element['isConnected'] == true) isConnected = true;
-      return element['isConnected'] != null || element['requestPermissionResult'] != null;
+      return element['isConnected'] == null && element['requestPermissionResult'] == null;
     });
 //    돌기까지 기다림
     await res.isEmpty;
