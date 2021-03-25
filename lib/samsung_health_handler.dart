@@ -118,7 +118,7 @@ class SamsungHealthHandler {
         await Future.delayed(Duration(milliseconds: 30));
         var passedTime = DateTime.fromMillisecondsSinceEpoch(millisecondTimestamp);
         var value = samsungHandlerValueHandler.stepCountState.value;
-        if (value != null) {
+        if (value != null && value.timestamp != null) {
           var dateTime = DateTime.fromMillisecondsSinceEpoch(value.timestamp);
           // var newValue = samsungHandlerValueHandler.stepCountState.value!.toJson();
           // print('@@@@@@@@@@@@22222223');
