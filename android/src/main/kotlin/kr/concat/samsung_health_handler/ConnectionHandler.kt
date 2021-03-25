@@ -77,13 +77,13 @@ class ConnectionHandler(
 
   override fun onConnected() {
       val hashMap = HashMap<String, Boolean>()
-      hashMap["isConnected"] = true;
-      eventSink?.success(hashMap);
     if (isPermissionAcquired()["result"] == true) {
       mReporter.requestDailyStepCount(StepCountReader.TODAY_START_UTC_TIME)
     } else {
       requestPermission()
     }
+    hashMap["isConnected"] = true;
+    eventSink?.success(hashMap);
   }
 
   override fun onConnectionFailed(error: HealthConnectionErrorResult) {

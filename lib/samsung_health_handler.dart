@@ -3,6 +3,13 @@ import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:samsung_health_handler/StepCountDataType.dart';
+//
+// class SamsungHealthHandlerInitialize {
+//   bool isConnected;
+//   bool permissionAcquired;
+//
+//   SamsungHealthHandlerInitialize({required this.isConnected, required this.permissionAcquired});
+// }
 
 class SamsungHealthHandler {
   static const MethodChannel channel = const MethodChannel('samsung_health_handler');
@@ -68,13 +75,17 @@ class SamsungHealthHandler {
 
   static Future<bool> initialize() async {
     bool isConnected = false;
-    bool permissionAcquired = false;
+    // bool permissionAcquired;
     channel.invokeMethod('initialize');
+    // var result = SamsungHealthHandlerInitialize(isConnected: false, permissionAcquired: false);
     var res = SamsungHealthHandler.connectionStream.takeWhile((element) {
-      if (element['requestPermissionResult'] != null) isConnected = true;
+      // print('@@@@@@@@@@@@');
+      // print(element);
+      // print('@@!12121212');
+      // if (element['requestPermissionResult'] != null) result.permissionAcquired = true;
       // permissionAcquired = element['requestPermissionResult'];
       if (element['isConnected'] == true) isConnected = true;
-      return element['isConnected'] == null && element['requestPermissionResult'] == null;
+      return element['isConnected'] == null;
     });
 //    돌기까지 기다림
     await res.isEmpty;
@@ -139,6 +150,7 @@ class SamsungHealthHandler {
             return;
           }
         }
+        return;
       });
       return result;
     } catch (error) {

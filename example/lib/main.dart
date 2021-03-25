@@ -33,7 +33,13 @@ class _MyAppState extends State<MyApp> {
 
   initialize() async {
     var isInitialized = await SamsungHealthHandler.initialize();
+    print('이니셜라이즈?');
+    // print(isInitialized.permissionAcquired);
+    // print(isInitialized.isConnected);
     if (isInitialized) {
+      var req = await SamsungHealthHandler.requestPermission();
+      print('퍼미션???????');
+      print(req);
       setState(() {
         loading = false;
       });
