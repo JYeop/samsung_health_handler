@@ -18,7 +18,7 @@ class StepCountDataType {
 
   factory StepCountDataType.fromJson(Map json) {
     return StepCountDataType(
-      stepCount: json['stepCount'],
+      stepCount: json['stepCount'] ?? 0,
       distance: json['distance'],
       calorie: json['calorie'],
       timestamp: json['timestamp'],
@@ -53,7 +53,7 @@ class StepCountBinningDataType {
 
   factory StepCountBinningDataType.fromJson(Map json) {
     return StepCountBinningDataType(
-      stepCount: json['stepCount'],
+      stepCount: json['stepCount'] ?? 0,
       time: json['time'],
       receivedAt: json['receivedAt'],
       error: json['error'],
