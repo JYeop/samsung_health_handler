@@ -29,7 +29,8 @@ class SamsungHealthHandler {
         // print(event.runtimeType.toString());
         // print(event.runtimeType.toString() != 'List<dynamic>');
         // print('!!!!!!!!!!!!!!!!!!!!!!!');
-        if (event.runtimeType.toString().contains('List<dynamic>')) {
+        if (event.runtimeType.toString().contains('List<dynamic>') ||
+            event.runtimeType.toString().contains('List<Object?>')) {
           // print('!!!!들갔누!!!!!!!!!!!!!!!!!!!');
           List<dynamic> newArr = List.from(event);
           var stepCountBinningData = newArr.map((e) {
